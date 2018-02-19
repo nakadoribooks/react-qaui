@@ -1,11 +1,17 @@
 export default class QaButtonHelper {
 
     static fixOverlay() {
-        const overlay = this.overlayDom;
-        const overlayInner = this.overlayInnerDom;
-        const width = overlayInner.clientWidth;
-        const val = (-width + (overlay.clientHeight / 1.6)) / 2.0;
+        // const width = this.overlayInnerDom.clientWidth;
+        // const height = this.overlayDom.clientHeight;
+        // const ratio = width / height;
+        // const r = width / 2;
+        // const l = height;
 
-        this.setState({ 'overlayTop': val });
+        // console.log(this.overlayDom.clientWidth, width, r, l, ratio);
+        // const val = 0;
+
+        // this.setState({ 'overlayTop': val });
+
+        // console.log(height, width);
     }
 }

@@ -24,7 +24,7 @@ class ButtonDemo extends React.Component {
 
                 {/* 通常のボタン */}
                 <ButtonInfo>
-                    <QaButton title='ボタン'
+                    <QaButton title='Button'
                         onClick={this.onClickQaButton.bind(this)}
                     />
                 </ButtonInfo>

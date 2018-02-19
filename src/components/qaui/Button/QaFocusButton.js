@@ -72,12 +72,12 @@ const Overlay = BaseOverlayStyle.extend``;
 
 const OverlayInner = BaseOverlayInnerStyle.extend`
     @keyframes QaFocusButtonFocusAnimation{
-        0% { transform: scale(0.0); opacity:0.0; } 
-        100% { transform: scale(1.0); opacity:1.0 }
+        0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.0; } 
+        100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0 }
     }
     @keyframes QaFocusButtonBlurAnimation{
-        0% { transform: scale(1.0); opacity:1.0; } 
-        100% { transform: scale(1.0); opacity:0.0 }
+        0% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0; } 
+        100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.0 }
     }
 
     ${ props => {

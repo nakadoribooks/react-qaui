@@ -89,25 +89,25 @@ const Overlay = BaseOverlayStyle.extend``;
 
 const OverlayInner = BaseOverlayInnerStyle.extend`
     background: ${buttonColor.disabled};
-    left:-20%;
+    // left:-20%;
     
     @keyframes QaLoadingFuttonFocusAnimation{
-        0% { transform: scale(0.0); opacity:0.0; } 
-        100% { transform: scale(1.0); opacity:1.0 }
+        0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.0; } 
+        100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0 }
     }
     @keyframes QaLoadingButtonBlurAnimation{
-        0% { transform: scale(1.0); opacity:1.0; } 
-        100% { transform: scale(1.0); opacity:0.0 }
+        0% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0; } 
+        100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.0 }
     }
 
     @keyframes QaLoadingButtonDoneAnimation{
-        0% { transform: scale(0.0); opacity:1.0; background:${buttonColor.base}; } 
-        100% { transform: scale(1.0); opacity:1.0;  background:${buttonColor.base}; }
+        0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:1.0; background:${buttonColor.base}; } 
+        100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0;  background:${buttonColor.base}; }
     }
 
     @keyframes QaLoadingButtonEndDoneAnimation{
-        0% { transform: scale(1.0); opacity:1.0; background:${buttonColor.base}; } 
-        100% { transform: scale(1.0); opacity:0.0;  background:${buttonColor.base}; }
+        0% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0; background:${buttonColor.base}; } 
+        100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.0;  background:${buttonColor.base}; }
     }
 
     ${ props => {

@@ -2,7 +2,6 @@ import React from 'react';
 import ButtonDemo from './ButtonDemo';
 import DemoHome from './DemoHome';
 import styled from 'styled-components';
-// import { BrowserRouter, Route, Link } from 'react-router-dom';
 import { Route, NavLink, Redirect } from 'react-router-dom';
 
 const menuWidth = 200;
@@ -48,16 +47,13 @@ const Contents = styled.div`
     padding-left: ${menuWidth}px;
 `;
 
-
 class QaDemo extends React.Component {
     render() {
         return (
             <div>
-                {/* <Router> */}
                 <Menu>
                     <SiteTitle>QaUI</SiteTitle>
                     <ul>
-                        {/* <li><NavLink to='/button'>Button</NavLink></li> */}
                         <li><MenuLink to='/home'>Home</MenuLink></li>
                         <li><MenuLink to='/button'>Button</MenuLink></li>
                     </ul>

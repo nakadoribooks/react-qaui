@@ -8,17 +8,18 @@ const buttonColor = {
 };
 
 const buttonTime = {
-    animation: 300
+    animation: 400
     , showingDone: 1500
 };
 
 const BaseTitleStyle = styled.p`
     user-select: none;
     font-size:14px;
+    line-height:1.0;
 `;
 
 const BaseWrapperStyle = styled.div`
-    padding:9px 15px;
+    padding:10px 15px;
     border-radius: 5px;
     border:1px solid ${buttonColor.base};
     display:inline-block;
@@ -49,12 +50,11 @@ const BaseOverlayStyle = styled.div`
 
 const BaseOverlayInnerStyle = styled.div`
     position: relative;
-    top: ${props => props.state.overlayTop}px;
     left:-20%;
     width: 140%;
     border-radius: calc(140% / 2);
     background: ${buttonColor.base};
-    transform: scale(0.0);
+    transform: translateY(calc(-50% + 16px)) scale(0.0);
     &:before {
         content: "";
         display: block;

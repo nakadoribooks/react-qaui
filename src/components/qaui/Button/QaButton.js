@@ -45,8 +45,8 @@ const Overlay = BaseOverlayStyle.extend``;
 const OverlayInner = BaseOverlayInnerStyle.extend`
     
     @keyframes QaButtonFocusAnimation{
-        0% { transform: scale(0.0); opacity:0.8; } 
-        100% { transform: scale(1.0); opacity:0.1 }
+        0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.8; } 
+        100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.1 }
     }
 
     ${ props => {
