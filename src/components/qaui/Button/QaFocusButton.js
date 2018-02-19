@@ -143,27 +143,29 @@ class QaButton extends Component {
 
     render() {
         return (
-            <Wrapper
-                disabled={this.props.disabled}
-                focus={this.state.focus}
-                onClick={this._onClick.bind(this)}>
-                <Overlay
-                    innerRef={(el) => { this.overlayDom = el; }}
-                    disabled={this.props.disabled}
-                    focus={this.state.focus}>
-                    <OverlayInner
-                        overlayTop={this.state.overlayTop}
-                        disabled={this.props.disabled}
-                        focus={this.state.focus}
-                        blur={this.state.blur}
-                        innerRef={(el) => { this.overlayInnerDom = el; }}
-                    />
-                </Overlay>
-                <Title
+            <div>
+                <Wrapper
                     disabled={this.props.disabled}
                     focus={this.state.focus}
-                >{this.props.title}</Title>
-            </Wrapper>
+                    onClick={this._onClick.bind(this)}>
+                    <Overlay
+                        innerRef={(el) => { this.overlayDom = el; }}
+                        disabled={this.props.disabled}
+                        focus={this.state.focus}>
+                        <OverlayInner
+                            overlayTop={this.state.overlayTop}
+                            disabled={this.props.disabled}
+                            focus={this.state.focus}
+                            blur={this.state.blur}
+                            innerRef={(el) => { this.overlayInnerDom = el; }}
+                        />
+                    </Overlay>
+                    <Title
+                        disabled={this.props.disabled}
+                        focus={this.state.focus}
+                    >{this.props.title}</Title>
+                </Wrapper>
+            </div>
         );
     }
 

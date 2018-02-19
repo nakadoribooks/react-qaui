@@ -7,7 +7,7 @@ const colorBase = '#3498db';
 const colorDisabled = '#555555';
 const colorBaseDark = '#1478cb';
 
-const animationTime = 200;
+const animationTime = 300;
 
 const Wrapper = styled.div`
     padding:5px 10px;
