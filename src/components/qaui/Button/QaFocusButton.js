@@ -23,8 +23,9 @@ const Wrapper = BaseWrapperStyle.extend`
             `;
 
         } else if (!state.focus && !state.blur) {
-            // hover
+            // default
             return `
+            cursor:pointer;
             &: hover{
                 border-color: ${ buttonColor.baseDark};
             }`;

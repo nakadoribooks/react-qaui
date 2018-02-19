@@ -28,9 +28,10 @@ const Wrapper = BaseWrapperStyle.extend`
             `;
         }
 
-        // hover
+        // defualt
         else if (!state.focus && !state.blur && !state.done && !state.endDone) {
             return `
+            cursor:pointer;
             &: hover{
                 border-color: ${ buttonColor.baseDark};
             }`;

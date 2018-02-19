@@ -11,7 +11,8 @@ import {
 } from './private/QaButtonStyle';
 
 const Wrapper = BaseWrapperStyle.extend`
-// hover
+// default
+cursor:pointer;
 &: hover{
     border-color: ${ buttonColor.baseDark};
 }

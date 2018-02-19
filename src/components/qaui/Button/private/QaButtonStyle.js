@@ -23,7 +23,7 @@ const BaseWrapperStyle = styled.div`
     border:1px solid ${buttonColor.base};
     display:inline-block;
     color: ${buttonColor.base};
-    cursor:pointer;
+    cursor:default;
     position:relative;
     overflow:hidden;
     
@@ -33,7 +33,6 @@ const BaseWrapperStyle = styled.div`
         // disable
         if (state.disabled) {
             return `
-            cursor:default ;
             border-color: ${ buttonColor.disabled};
             `;
         }
