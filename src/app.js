@@ -15,11 +15,14 @@ class App extends React.Component {
             <div>
                 <ButtonInfo>
                     <QaButton title='ボタン'
-                        disabled={false} />
+                        disabled={false}
+                        onClick={this.onClickQaButton.bind(this)}
+                    />
                 </ButtonInfo>
                 <ButtonInfo>
                     <QaFocusButton title='FocusButton'
                         disabled={false}
+                        onClick={this.onClickQaFocusButton.bind(this)}
                         ref={(el) => { this._focusButton = el; }}
                     />
                     <button onClick={this.clickBlurButton.bind(this)}>blur</button>
@@ -27,6 +30,7 @@ class App extends React.Component {
                 <ButtonInfo>
                     <QaLoadingButton title='LoadingButton'
                         disabled={false}
+                        onClick={this.onClickQaLoadingButton.bind(this)}
                         ref={(el) => { this._loadingButton = el; }}
                     />
                     <button onClick={this.clickCancelButton.bind(this)}>Cancel</button>
@@ -36,17 +40,27 @@ class App extends React.Component {
         );
     }
 
+    onClickQaButton() {
+        console.log('onClickQaButton');
+    }
+
+    onClickQaFocusButton() {
+        console.log('onClickQaFocusButton');
+    }
+
+    onClickQaLoadingButton() {
+        console.log('onClickQaFocusButton');
+    }
+
     clickBlurButton() {
         this._focusButton.blur();
     }
 
     clickCancelButton() {
-        console.log('clickCancelButton');
         this._loadingButton.cancel();
     }
 
     clickDoneButton() {
-        console.log('clickCancelButton');
         this._loadingButton.done();
     }
 }

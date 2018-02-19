@@ -179,12 +179,12 @@ class QaButton extends Component {
     }
 
     _onClick() {
+        if (this.state.focus) { return; }
+        if (this.props.onClick != null) this.props.onClick.apply(this, arguments);
         this._focus();
     }
 
     _focus() {
-        if (this.state.focus) { return; }
-
         this.setState({ focus: true });
     }
 
@@ -201,7 +201,8 @@ class QaButton extends Component {
 
 QaButton.propTypes = {
     title: PropTypes.string,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    onClick: PropTypes.func
 };
 
 export default QaButton;
