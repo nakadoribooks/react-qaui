@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import QaButtonHelper from './private/QaButtonHelper';
 
 const colorBase = '#3498db';
 const colorWhite = '#ffffff';
@@ -20,19 +21,21 @@ const Wrapper = styled.div`
     overflow:hidden;
 
     ${props => {
+        let state = props.state;
+
         // 共通
         const base = `&: hover{
             border-color: ${ colorBaseDark};
         }`;
 
         // disable
-        if (props.disabled) {
+        if (state.disabled) {
             return `
             cursor:default ;
             border-color: ${ colorDisabled};
             `;
             // focus
-        } else if (props.focus) {
+        } else if (state.focus) {
             return `${base}
             `;
             // default
@@ -54,11 +57,12 @@ const Title = styled.p`
     }
 
     ${ props => {
-        if (props.disabled) {
+        let state = props.state;
+        if (state.disabled) {
             return `
             color: ${colorDisabled};
             `;
-        } else if (props.focus) {
+        } else if (state.focus) {
             return `
                 animation-name: QaFocusButtonTitleFocusAnimation;
                 animation-duration: ${animationTime}ms;
@@ -78,7 +82,7 @@ const Overlay = styled.div`
 
 const OverlayInner = styled.div`
     position: relative;
-    top: ${props => props.overlayTop}px;
+    top: ${props => props.state.overlayTop}px;
     left:-20%;
     width: 140%;
     border-radius: calc(140% / 2);
@@ -99,16 +103,17 @@ const OverlayInner = styled.div`
     }
 
     ${ props => {
-        if (props.disabled) {
+        let state = props.state;
+        if (state.disabled) {
             return `
             `;
-        } else if (props.focus) {
+        } else if (state.focus) {
             return `
                 animation-name: QaFocusButtonFocusAnimation;
                 animation-duration: ${animationTime}ms;
                 animation-fill-mode: forwards;
             `;
-        } else if (props.blur) {
+        } else if (state.blur) {
             return `
                 animation-name: QaFocusButtonBlurAnimation;
                 animation-duration: ${animationTime}ms;
@@ -118,10 +123,10 @@ const OverlayInner = styled.div`
     }}
 `;
 
-class QaButton extends Component {
+class QaFocusButton extends Component {
     constructor(props) {
         super(props);
-        this.state = { focus: false, blur: false, overlayTop: 0 };
+        this.state = { disabled: props.disabled, focus: false, blur: false, overlayTop: 0 };
         this.overlayInner = null;
     }
 
@@ -138,44 +143,29 @@ class QaButton extends Component {
     // lifeCycle
 
     componentDidMount() {
-        this._fixSize();
+        QaButtonHelper.fixOverlay.apply(this);
     }
 
     render() {
         return (
             <div>
                 <Wrapper
-                    disabled={this.props.disabled}
-                    focus={this.state.focus}
+                    state={this.state}
                     onClick={this._onClick.bind(this)}>
                     <Overlay
                         innerRef={(el) => { this.overlayDom = el; }}
-                        disabled={this.props.disabled}
-                        focus={this.state.focus}>
+                        state={this.state}>
                         <OverlayInner
-                            overlayTop={this.state.overlayTop}
-                            disabled={this.props.disabled}
-                            focus={this.state.focus}
-                            blur={this.state.blur}
+                            state={this.state}
                             innerRef={(el) => { this.overlayInnerDom = el; }}
                         />
                     </Overlay>
                     <Title
-                        disabled={this.props.disabled}
-                        focus={this.state.focus}
+                        state={this.state}
                     >{this.props.title}</Title>
                 </Wrapper>
             </div>
         );
-    }
-
-    _fixSize() {
-        const overlay = this.overlayDom;
-        const overlayInner = this.overlayInnerDom;
-        const width = overlayInner.clientWidth;
-        const val = (-width + (overlay.clientHeight / 1.7)) / 2.0;
-
-        this.setState({ 'overlayTop': val });
     }
 
     _onClick() {
@@ -199,10 +189,10 @@ class QaButton extends Component {
     }
 }
 
-QaButton.propTypes = {
+QaFocusButton.propTypes = {
     title: PropTypes.string,
     disabled: PropTypes.bool,
     onClick: PropTypes.func
 };
 
-export default QaButton;
+export default QaFocusButton;

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import QaButtonHelper from './private/QaButtonHelper';
 
 const colorBase = '#3498db';
-const colorWhite = '#ffffff';
-const colorDisabled = '#555555';
 const colorBaseDark = '#1478cb';
+const colorLightText = '#ffffff';
+const colorDisabled = '#555555';
 
 const animationTime = 300;
 const showDoneTIme = 1500;
@@ -21,24 +22,26 @@ const Wrapper = styled.div`
     overflow:hidden;
 
     ${props => {
+        let state = props.state;
+
         // 共通
         const base = `&: hover{
             border-color: ${ colorBaseDark};
         }`;
 
         // disable
-        if (props.disabled) {
+        if (state.disabled) {
             return `
             cursor:default ;
             border-color: ${ colorDisabled};
             `;
             // focus
-        } else if (props.focus) {
+        } else if (state.focus) {
             return `
             border-color: ${colorDisabled};
             `;
             // done
-        } else if (props.done) {
+        } else if (state.done) {
             return `
             background-color: ${colorDisabled};
             `;
@@ -56,37 +59,39 @@ const Title = styled.p`
     
     @keyframes QaLoadingButtonTitleFocusAnimation{
         0% { transform: translateX(0px) scale(1.0); color:${colorBase}; } 
-        100% { transform: translateX(15px) scale(0.85); color:${colorWhite}; }
+        100% { transform: translateX(15px) scale(0.85); color:${colorLightText}; }
     }
 
     @keyframes QaLoadingButtonTitleBlurAnimation{
-        0% { transform: translateX(15px) scale(0.85); color:${colorWhite}; } 
+        0% { transform: translateX(15px) scale(0.85); color:${colorLightText}; } 
         100% { transform: translateX(0px) scale(1.0); color:${colorBase}; }
     }
 
     ${ props => {
-        if (props.disabled) {
+        let state = props.state;
+
+        if (state.disabled) {
             return `
             color: ${colorDisabled};
             `;
-        } else if (props.focus) {
+        } else if (state.focus) {
             return `
                 animation-name: QaLoadingButtonTitleFocusAnimation;
                 animation-duration: ${animationTime}ms;
                 animation-fill-mode: forwards;
             `;
-        } else if (props.blur) {
+        } else if (state.blur) {
             return `
                 animation-name: QaLoadingButtonTitleBlurAnimation;
                 animation-duration: ${animationTime}ms;
                 animation-fill-mode: forwards;
             `;
-        } else if (props.done) {
+        } else if (state.done) {
             return `
-                color: ${colorWhite};
+                color: ${colorLightText};
                 transform: translateX(15px) scale(0.85);
             `;
-        } else if (props.endDone) {
+        } else if (state.endDone) {
             return `
                 animation-name: QaLoadingButtonTitleBlurAnimation;
                 animation-duration: ${animationTime}ms;
@@ -106,7 +111,7 @@ const Overlay = styled.div`
 
 const OverlayInner = styled.div`
     position: relative;
-    top: ${props => props.overlayTop}px;
+    top: ${props => props.state.overlayTop}px;
     left:-20%;
     width: 140%;
     border-radius: calc(140% / 2);
@@ -137,28 +142,30 @@ const OverlayInner = styled.div`
     }
 
     ${ props => {
-        if (props.disabled) {
+        let state = props.state;
+
+        if (state.disabled) {
             return `
             `;
-        } else if (props.focus) {
+        } else if (state.focus) {
             return `
                 animation-name: QaLoadingFuttonFocusAnimation;
                 animation-duration: ${animationTime}ms;
                 animation-fill-mode: forwards;
             `;
-        } else if (props.blur) {
+        } else if (state.blur) {
             return `
                 animation-name: QaLoadingButtonBlurAnimation;
                 animation-duration: ${animationTime}ms;
                 animation-fill-mode: forwards;
             `;
-        } else if (props.done) {
+        } else if (state.done) {
             return `
                 animation-name: QaLoadingButtonDoneAnimation;
                 animation-duration: ${animationTime}ms;
                 animation-fill-mode: forwards;
             `;
-        } else if (props.endDone) {
+        } else if (state.endDone) {
             return `
                 animation-name: QaLoadingButtonEndDoneAnimation;
                 animation-duration: ${animationTime}ms;
@@ -176,6 +183,8 @@ const LoadingContainer = styled.div`
     height:18px;
 `;
 
+// thank you!
+// https://codepen.io/nuconeco/pen/ZXJOGK
 const Loader = styled.div`
     position: relative;
     display: inline-block;
@@ -213,7 +222,9 @@ const Loader = styled.div`
     }
 
     ${ props => {
-        if (props.focus) {
+        let state = props.state;
+
+        if (state.focus) {
             return `
                 opacity: 1.0;
             `;
@@ -231,7 +242,9 @@ const DoneContainer = styled.div`
     transition: opacity 200ms ease;
 
     ${ props => {
-        if (props.done) {
+        let state = props.state;
+
+        if (state.done) {
             return `
                 opacity: 1.0;
             `;
@@ -239,11 +252,11 @@ const DoneContainer = styled.div`
     }}
 `;
 
-class QaButton extends Component {
+class QaLoadingButton extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { focus: false, blur: false, done: false, endDone: false, overlayTop: 0 };
+        this.state = { disabled: props.disabled, focus: false, blur: false, done: false, endDone: false, overlayTop: 0 };
         this.overlayInner = null;
     }
 
@@ -257,38 +270,32 @@ class QaButton extends Component {
 
     // lifeCycle
 
-    componentDidMount() { this._fixSize(); }
+    componentDidMount() {
+        QaButtonHelper.fixOverlay.apply(this);
+    }
 
     render() {
 
         return (
             <div>
                 <Wrapper
-                    disabled={this.props.disabled}
-                    focus={this.state.focus}
-                    done={this.state.done}
+                    state={this.state}
                     onClick={this._onClick.bind(this)}>
                     <Overlay
-                        innerRef={(el) => { this.overlayDom = el; }}
-                        disabled={this.props.disabled}
-                        focus={this.state.focus}>
+                        state={this.state}
+                        innerRef={(el) => { this.overlayDom = el; }}>
                         <OverlayInner
-                            overlayTop={this.state.overlayTop}
-                            disabled={this.props.disabled}
-                            focus={this.state.focus}
-                            blur={this.state.blur}
-                            done={this.state.done}
-                            endDone={this.state.endDone}
+                            state={this.state}
                             innerRef={(el) => { this.overlayInnerDom = el; }}
                         />
                     </Overlay>
                     <LoadingContainer>
                         <Loader
-                            focus={this.state.focus}
+                            state={this.state}
                         />
                     </LoadingContainer>
                     <DoneContainer
-                        done={this.state.done}
+                        state={this.state}
                     >
                         <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0h24v24H0z" fill="none" />
@@ -296,11 +303,7 @@ class QaButton extends Component {
                         </svg>
                     </DoneContainer>
                     <Title
-                        disabled={this.props.disabled}
-                        focus={this.state.focus}
-                        blur={this.state.blur}
-                        done={this.state.done}
-                        endDone={this.state.endDone}
+                        state={this.state}
                     >{this.props.title}</Title>
                 </Wrapper>
             </div>
@@ -308,15 +311,6 @@ class QaButton extends Component {
     }
 
     // private
-
-    _fixSize() {
-        const overlay = this.overlayDom;
-        const overlayInner = this.overlayInnerDom;
-        const width = overlayInner.clientWidth;
-        const val = (-width + (overlay.clientHeight / 1.7)) / 2.0;
-
-        this.setState({ 'overlayTop': val });
-    }
 
     _onClick() {
         if (!this._canClick()) return;
@@ -338,7 +332,7 @@ class QaButton extends Component {
     }
 
     _done() {
-        if (this.state.done) return;
+        if (!this.state.focus) return;
 
         this.setState({ done: true, focus: false, blur: false });
         setTimeout(() => {
@@ -363,10 +357,10 @@ class QaButton extends Component {
     }
 }
 
-QaButton.propTypes = {
+QaLoadingButton.propTypes = {
     title: PropTypes.string,
     disabled: PropTypes.bool,
     onClick: PropTypes.func
 };
 
-export default QaButton;
+export default QaLoadingButton;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import QaButtonHelper from './private/QaButtonHelper';
 
 const colorBase = '#3498db';
 // const colorWhite = '#ffffff';
@@ -26,7 +27,7 @@ const Wrapper = styled.div`
         }`;
 
         // disable
-        if (props.disabled) {
+        if (props.state.disabled) {
             return `
             cursor:default ;
             border-color: ${ colorDisabled};
@@ -55,11 +56,11 @@ const Title = styled.p`
     }
 
     ${ props => {
-        if (props.disabled) {
+        if (props.state.disabled) {
             return `
             color: ${colorDisabled};
             `;
-        } else if (props.focus) {
+        } else if (props.state.focus) {
             return `
                 animation-name: QaButtonTitleFocusAnimation;
                 animation-duration: ${animationTime}ms;
@@ -95,10 +96,10 @@ const OverlayInner = styled.div`
     }
 
     ${ props => {
-        if (props.disabled) {
+        if (props.state.disabled) {
             return `
             `;
-        } else if (props.focus) {
+        } else if (props.state.focus) {
             return `
                 animation-name: QaButtonFocusAnimation;
                 animation-duration: ${animationTime}ms;
@@ -110,48 +111,37 @@ const OverlayInner = styled.div`
 class QaButton extends Component {
     constructor(props) {
         super(props);
-        this.state = { focus: false, overlayTop: 0 };
+        this.state = { disabled: props.disabled, focus: false, overlayTop: 0 };
         this.overlayInner = null;
     }
 
     componentDidMount() {
-        this._fixSize();
+        QaButtonHelper.fixOverlay.apply(this);
     }
 
     render() {
         return (
             <div>
                 <Wrapper
-                    disabled={this.props.disabled}
-                    focus={this.state.focus}
+                    state={this.state}
                     onClick={this.onClick.bind(this)}>
                     <Overlay
                         innerRef={(el) => { this.overlayDom = el; }}
-                        disabled={this.props.disabled}
-                        focus={this.state.focus}>
+                        state={this.state}>
                         <OverlayInner
+                            state={this.state}
                             overlayTop={this.state.overlayTop}
                             disabled={this.props.disabled}
-                            focus={this.state.focus}
                             innerRef={(el) => { this.overlayInnerDom = el; }}
                         />
                     </Overlay>
                     <Title
                         disabled={this.props.disabled}
-                        focus={this.state.focus}
+                        state={this.state}
                     >{this.props.title}</Title>
                 </Wrapper>
             </div>
         );
-    }
-
-    _fixSize() {
-        const overlay = this.overlayDom;
-        const overlayInner = this.overlayInnerDom;
-        const width = overlayInner.clientWidth;
-        const val = (-width + (overlay.clientHeight / 2)) / 2.0;
-
-        this.setState({ 'overlayTop': val });
     }
 
     onClick() {
