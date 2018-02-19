@@ -60,7 +60,7 @@ class QaDemo extends React.Component {
                 </Menu>
 
                 <Contents>
-                    <Route exact path='/' component={DemoHome} />
+                    <Route exact path='/home' component={DemoHome} />
                     <Route path='/button' component={ButtonDemo} />
                     <Route exact path="/" render={() => (
                         <Redirect to="/home" />

@@ -4,9 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "netlify-cli": "^1.2.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
+    "react-syntax-highlighter": "^7.0.0",
     "styled-components": "^3.1.6"
   },
   "devDependencies": {
