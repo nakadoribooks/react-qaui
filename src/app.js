@@ -26,7 +26,7 @@ class App extends React.Component {
                     <button onClick={this.clickBlurButton.bind(this)}>blur</button>
                 </ButtonInfo>
                 <ButtonInfo>
-                    <QaLoadingButton title='LoadingButton'
+                    <QaLoadingButton title='FocusButton'
                         disabled={false}
                         onClick={this.onClickQaLoadingButton.bind(this)}
                         ref={(el) => { this._loadingButton = el; }}

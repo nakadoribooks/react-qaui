@@ -1,98 +1,65 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import QaButtonHelper from './private/QaButtonHelper';
+import {
+    buttonColor
+    , buttonTime
+    , BaseWrapperStyle
+    , BaseOverlayStyle
+    , BaseOverlayInnerStyle
+    , BaseTitleStyle
+} from './private/QaButtonStyle';
 
-const colorBase = '#3498db';
-const colorWhite = '#ffffff';
-const colorDisabled = '#555555';
-const colorBaseDark = '#1478cb';
-
-const animationTime = 300;
-
-const Wrapper = styled.div`
-    padding:5px 10px;
-    border-radius: 5px;
-    border:1px solid ${colorBase};
-    display:inline-block;
-    color: ${colorBase};
-    cursor:pointer;
-    position:relative;
-    overflow:hidden;
+const Wrapper = BaseWrapperStyle.extend`
 
     ${props => {
         let state = props.state;
-
-        // 共通
-        const base = `&: hover{
-            border-color: ${ colorBaseDark};
-        }`;
 
         // disable
         if (state.disabled) {
             return `
             cursor:default ;
-            border-color: ${ colorDisabled};
+            border-color: ${buttonColor.disabled};
             `;
-            // focus
-        } else if (state.focus) {
-            return `${base}
-            `;
-            // default
-        } else {
-            return `${base}
-            `;
+
+        } else if (!state.focus && !state.blur) {
+            // hover
+            return `
+            &: hover{
+                border-color: ${ buttonColor.baseDark};
+            }`;
         }
+
     }}
 `;
 
 
-const Title = styled.p`
-    position:relative;
-    user-select: none;
-    
+const Title = BaseTitleStyle.extend`
+
     @keyframes QaFocusButtonTitleFocusAnimation{
-        0% { transform: scale(1.0); color:${colorBase}; } 
-        100% { transform: scale(0.98); color:${colorWhite}; }
+        0% { transform: scale(1.0); color:${buttonColor.base}; } 
+        100% { transform: scale(0.98); color:${buttonColor.lightText}; }
     }
 
     ${ props => {
         let state = props.state;
         if (state.disabled) {
             return `
-            color: ${colorDisabled};
+            color: ${buttonColor.disabled};
             `;
         } else if (state.focus) {
             return `
                 animation-name: QaFocusButtonTitleFocusAnimation;
-                animation-duration: ${animationTime}ms;
+                animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         }
     }}
 `;
 
-const Overlay = styled.div`
-    position: absolute;
-    top:0px;
-    left:0px;
-    width:100%;
-    height: 100%;
-`;
+const Overlay = BaseOverlayStyle.extend``;
 
-const OverlayInner = styled.div`
-    position: relative;
-    top: ${props => props.state.overlayTop}px;
-    left:-20%;
-    width: 140%;
-    border-radius: calc(140% / 2);
-    background: ${colorBase};
-    transform: scale(0.0);
-    &:before {
-        content: "";
-        display: block;
-        padding-bottom: 100%;
-    }
+const OverlayInner = BaseOverlayInnerStyle.extend`
     @keyframes QaFocusButtonFocusAnimation{
         0% { transform: scale(0.0); opacity:0.0; } 
         100% { transform: scale(1.0); opacity:1.0 }
@@ -110,13 +77,13 @@ const OverlayInner = styled.div`
         } else if (state.focus) {
             return `
                 animation-name: QaFocusButtonFocusAnimation;
-                animation-duration: ${animationTime}ms;
+                animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         } else if (state.blur) {
             return `
                 animation-name: QaFocusButtonBlurAnimation;
-                animation-duration: ${animationTime}ms;
+                animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         }
@@ -185,7 +152,7 @@ class QaFocusButton extends Component {
 
         setTimeout(() => {
             this.setState({ focus: false, blur: false });
-        }, animationTime);
+        }, buttonTime.animation);
     }
 }
 

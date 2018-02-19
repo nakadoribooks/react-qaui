@@ -2,69 +2,52 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import QaButtonHelper from './private/QaButtonHelper';
+import {
+    buttonColor
+    , buttonTime
+    , BaseWrapperStyle
+    , BaseOverlayStyle
+    , BaseOverlayInnerStyle
+    , BaseTitleStyle
+    , LoaderStyle
+} from './private/QaButtonStyle';
 
-const colorBase = '#3498db';
-const colorBaseDark = '#1478cb';
-const colorLightText = '#ffffff';
-const colorDisabled = '#555555';
-
-const animationTime = 300;
-const showDoneTIme = 1500;
-
-const Wrapper = styled.div`
-    padding:5px 10px;
-    border-radius: 5px;
-    border:1px solid ${colorBase};
-    display:inline-block;
-    color: ${colorBase};
-    cursor:pointer;
-    position:relative;
-    overflow:hidden;
-
+const Wrapper = BaseWrapperStyle.extend`
+    padding-left: 20px;
+    padding-right : 20px;
     ${props => {
         let state = props.state;
 
-        // 共通
-        const base = `&: hover{
-            border-color: ${ colorBaseDark};
-        }`;
-
-        // disable
-        if (state.disabled) {
+        if (state.focus) {
             return `
-            cursor:default ;
-            border-color: ${ colorDisabled};
+            border-color: ${buttonColor.disabled};
             `;
-            // focus
-        } else if (state.focus) {
-            return `
-            border-color: ${colorDisabled};
-            `;
-            // done
         } else if (state.done) {
             return `
-            background-color: ${colorDisabled};
+            background-color: ${buttonColor.disabled};
             `;
-            // default
-        } else {
-            return `${base}
-            `;
+        }
+
+        // hover
+        else if (!state.focus && !state.blur && !state.done && !state.endDone) {
+            return `
+            &: hover{
+                border-color: ${ buttonColor.baseDark};
+            }`;
         }
     }}
 `;
 
-const Title = styled.p`
-    position:relative;
-    user-select: none;
+const Title = BaseTitleStyle.extend`
     
     @keyframes QaLoadingButtonTitleFocusAnimation{
-        0% { transform: translateX(0px) scale(1.0); color:${colorBase}; } 
-        100% { transform: translateX(15px) scale(0.85); color:${colorLightText}; }
+        0% { transform: translateX(0px) scale(1.0); color:${buttonColor.base}; } 
+        100% { transform: translateX(12px) scale(0.9); color:${buttonColor.lightText}; }
     }
 
     @keyframes QaLoadingButtonTitleBlurAnimation{
-        0% { transform: translateX(15px) scale(0.85); color:${colorLightText}; } 
-        100% { transform: translateX(0px) scale(1.0); color:${colorBase}; }
+        0% { transform: translateX(12px) scale(0.9); color:${buttonColor.lightText}; } 
+        100% { transform: translateX(0px) scale(1.0); color:${buttonColor.base}; }
     }
 
     ${ props => {
@@ -72,56 +55,41 @@ const Title = styled.p`
 
         if (state.disabled) {
             return `
-            color: ${colorDisabled};
+            color: ${buttonColor.disabled};
             `;
         } else if (state.focus) {
             return `
                 animation-name: QaLoadingButtonTitleFocusAnimation;
-                animation-duration: ${animationTime}ms;
+                animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         } else if (state.blur) {
             return `
                 animation-name: QaLoadingButtonTitleBlurAnimation;
-                animation-duration: ${animationTime}ms;
+                animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         } else if (state.done) {
             return `
-                color: ${colorLightText};
-                transform: translateX(15px) scale(0.85);
+                color: ${buttonColor.lightText};
+                transform: translateX(12px) scale(0.9);
             `;
         } else if (state.endDone) {
             return `
                 animation-name: QaLoadingButtonTitleBlurAnimation;
-                animation-duration: ${animationTime}ms;
+                animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         }
     }}
 `;
 
-const Overlay = styled.div`
-    position: absolute;
-    top:0px;
-    left:0px;
-    width:100%;
-    height: 100%;
-`;
+const Overlay = BaseOverlayStyle.extend``;
 
-const OverlayInner = styled.div`
-    position: relative;
-    top: ${props => props.state.overlayTop}px;
+const OverlayInner = BaseOverlayInnerStyle.extend`
+    background: ${buttonColor.disabled};
     left:-20%;
-    width: 140%;
-    border-radius: calc(140% / 2);
-    background: ${colorDisabled};
-    transform: scale(0.0);
-    &:before {
-        content: "";
-        display: block;
-        padding-bottom: 100%;
-    }
+    
     @keyframes QaLoadingFuttonFocusAnimation{
         0% { transform: scale(0.0); opacity:0.0; } 
         100% { transform: scale(1.0); opacity:1.0 }
@@ -132,13 +100,13 @@ const OverlayInner = styled.div`
     }
 
     @keyframes QaLoadingButtonDoneAnimation{
-        0% { transform: scale(0.0); opacity:1.0; background:${colorBase}; } 
-        100% { transform: scale(1.0); opacity:1.0;  background:${colorBase}; }
+        0% { transform: scale(0.0); opacity:1.0; background:${buttonColor.base}; } 
+        100% { transform: scale(1.0); opacity:1.0;  background:${buttonColor.base}; }
     }
 
     @keyframes QaLoadingButtonEndDoneAnimation{
-        0% { transform: scale(1.0); opacity:1.0; background:${colorBase}; } 
-        100% { transform: scale(1.0); opacity:0.0;  background:${colorBase}; }
+        0% { transform: scale(1.0); opacity:1.0; background:${buttonColor.base}; } 
+        100% { transform: scale(1.0); opacity:0.0;  background:${buttonColor.base}; }
     }
 
     ${ props => {
@@ -150,25 +118,25 @@ const OverlayInner = styled.div`
         } else if (state.focus) {
             return `
                 animation-name: QaLoadingFuttonFocusAnimation;
-                animation-duration: ${animationTime}ms;
+                animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         } else if (state.blur) {
             return `
                 animation-name: QaLoadingButtonBlurAnimation;
-                animation-duration: ${animationTime}ms;
+                animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         } else if (state.done) {
             return `
                 animation-name: QaLoadingButtonDoneAnimation;
-                animation-duration: ${animationTime}ms;
+                animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         } else if (state.endDone) {
             return `
                 animation-name: QaLoadingButtonEndDoneAnimation;
-                animation-duration: ${animationTime}ms;
+                animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         }
@@ -183,43 +151,9 @@ const LoadingContainer = styled.div`
     height:18px;
 `;
 
-// thank you!
-// https://codepen.io/nuconeco/pen/ZXJOGK
-const Loader = styled.div`
-    position: relative;
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border: 2px solid white;
-    border-radius: 50%;
-    animation: QaLoadingButtonSpinAnimation 0.75s infinite linear;
-    border-top-color: transparent;
+const Loader = LoaderStyle.extend`
     opacity:0.0;
     transition: opacity 200ms ease;
-
-    &:before,  &:after{
-        left: -2px;
-        top: -2px;
-        display: none;
-        position: absolute;
-        content: "";
-        width: inherit;
-        height: inherit;
-        border: inherit;
-        border-radius: inherit;
-    }
-    &:after{
-        display: block;
-        left: -2px;
-        top: -2px;
-        border: inherit;
-        transform: rotate(65deg);
-    }
-
-    @keyframes QaLoadingButtonSpinAnimation {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
 
     ${ props => {
         let state = props.state;
@@ -339,14 +273,14 @@ class QaLoadingButton extends Component {
             this.setState({ done: false, endDone: true });
             setTimeout(() => {
                 this._cancelState();
-            }, animationTime);
-        }, showDoneTIme);
+            }, buttonTime.animaion);
+        }, buttonTime.showingDone);
     }
 
     _cancelState() {
         setTimeout(() => {
             this.setState({ focus: false, blur: false, done: false, endDone: false });
-        }, animationTime);
+        }, buttonTime.animation);
     }
 
     _canClick() {

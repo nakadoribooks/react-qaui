@@ -1,53 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import QaButtonHelper from './private/QaButtonHelper';
+import {
+    buttonColor
+    , buttonTime
+    , BaseWrapperStyle
+    , BaseOverlayStyle
+    , BaseOverlayInnerStyle
+    , BaseTitleStyle
+} from './private/QaButtonStyle';
 
-const colorBase = '#3498db';
-// const colorWhite = '#ffffff';
-const colorDisabled = '#555555';
-const colorBaseDark = '#1478cb';
-
-const animationTime = 300;
-
-const Wrapper = styled.div`
-    padding:5px 10px;
-    border-radius: 5px;
-    border:1px solid ${colorBase};
-    display:inline-block;
-    color: ${colorBase};
-    cursor:pointer;
-    position:relative;
-    overflow:hidden;
-
-    ${props => {
-        // 共通
-        const base = `&: hover{
-            border-color: ${ colorBaseDark};
-        }`;
-
-        // disable
-        if (props.state.disabled) {
-            return `
-            cursor:default ;
-            border-color: ${ colorDisabled};
-            `;
-            // focus
-        } else if (props.focus) {
-            return `${base}
-            `;
-            // default
-        } else {
-            return `${base}
-            `;
-        }
-    }}
+const Wrapper = BaseWrapperStyle.extend`
+// hover
+&: hover{
+    border-color: ${ buttonColor.baseDark};
+}
 `;
 
-
-const Title = styled.p`
-    position:relative;
-    user-select: none;
+const Title = BaseTitleStyle.extend`
     
     @keyframes QaButtonTitleFocusAnimation{
         0% { transform: scale(1.0); } 
@@ -58,51 +28,37 @@ const Title = styled.p`
     ${ props => {
         if (props.state.disabled) {
             return `
-            color: ${colorDisabled};
+            color: ${buttonColor.disabled};
             `;
         } else if (props.state.focus) {
             return `
                 animation-name: QaButtonTitleFocusAnimation;
-                animation-duration: ${animationTime}ms;
+                animation-duration: ${buttonTime.animation}ms;
             `;
         }
     }}
 `;
 
-const Overlay = styled.div`
-    position: absolute;
-    top:0px;
-    left:0px;
-    width:100%;
-    height: 100%;
-`;
+const Overlay = BaseOverlayStyle.extend``;
 
-const OverlayInner = styled.div`
-    position: relative;
-    top: ${props => props.overlayTop}px;
-    left:-20%;
-    width: 140%;
-    border-radius: calc(140% / 2);
-    background: ${colorBase};
-    transform: scale(0.0);
-    &:before {
-        content: "";
-        display: block;
-        padding-bottom: 100%;
-    }
+const OverlayInner = BaseOverlayInnerStyle.extend`
+    
     @keyframes QaButtonFocusAnimation{
         0% { transform: scale(0.0); opacity:0.8; } 
         100% { transform: scale(1.0); opacity:0.1 }
     }
 
     ${ props => {
-        if (props.state.disabled) {
+
+        let state = props.state;
+
+        if (state.disabled) {
             return `
             `;
-        } else if (props.state.focus) {
+        } else if (state.focus) {
             return `
                 animation-name: QaButtonFocusAnimation;
-                animation-duration: ${animationTime}ms;
+                animation-duration: ${buttonTime.animation}ms;
             `;
         }
     }}
@@ -150,7 +106,7 @@ class QaButton extends Component {
         this.setState({ focus: true });
         setTimeout(() => {
             this.setState({ focus: false });
-        }, animationTime);
+        }, buttonTime.animation);
     }
 }
 
