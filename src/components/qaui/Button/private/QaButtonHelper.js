@@ -4,7 +4,7 @@ export default class QaButtonHelper {
         const overlay = this.overlayDom;
         const overlayInner = this.overlayInnerDom;
         const width = overlayInner.clientWidth;
-        const val = (-width + (overlay.clientHeight / 1.7)) / 2.0;
+        const val = (-width + (overlay.clientHeight / 1.6)) / 2.0;
 
         this.setState({ 'overlayTop': val });
     }

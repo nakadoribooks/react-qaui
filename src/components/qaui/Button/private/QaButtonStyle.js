@@ -18,7 +18,7 @@ const BaseTitleStyle = styled.p`
 `;
 
 const BaseWrapperStyle = styled.div`
-    padding:7px 15px;
+    padding:9px 15px;
     border-radius: 5px;
     border:1px solid ${buttonColor.base};
     display:inline-block;

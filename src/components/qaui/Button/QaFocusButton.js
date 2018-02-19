@@ -41,6 +41,10 @@ const Title = BaseTitleStyle.extend`
         0% { transform: scale(1.0); color:${buttonColor.base}; } 
         100% { transform: scale(0.98); color:${buttonColor.lightText}; }
     }
+    @keyframes QaFocusButtonTitleBlurAnimation{
+        0% { transform: scale(0.98); color:${buttonColor.lightText}; } 
+        100% { transform: scale(1.0); color:${buttonColor.base}; }
+    }
 
     ${ props => {
         let state = props.state;
@@ -51,6 +55,12 @@ const Title = BaseTitleStyle.extend`
         } else if (state.focus) {
             return `
                 animation-name: QaFocusButtonTitleFocusAnimation;
+                animation-duration: ${buttonTime.animation}ms;
+                animation-fill-mode: forwards;
+            `;
+        } else if (state.blur) {
+            return `
+                animation-name: QaFocusButtonTitleBlurAnimation;
                 animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
