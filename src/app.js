@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import QaButton from './components/qaui/Button/QaButton';
-import QaFocusButton from './components/qaui/Button/QaFocusButton';
-import QaLoadingButton from './components/qaui/Button/QaLoadingButton';
+import { QaButton, QaFocusButton, QaLoadingButton } from './components/qaui/Button';
 import styled from 'styled-components';
 
 const ButtonInfo = styled.div`
