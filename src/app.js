@@ -6,7 +6,7 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <QaButton title='ボタン' disabled={false} />
+                <QaButton title='ボタン' disabled={false} buttonRef={node => this.buttonRef = node} />
             </div>
         );
     }
