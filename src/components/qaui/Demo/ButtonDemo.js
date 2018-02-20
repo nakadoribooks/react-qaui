@@ -38,6 +38,14 @@ const Code = styled(SyntaxHighlighter) `
 `;
 
 class ButtonDemo extends React.Component {
+
+    constructor() {
+        super();
+        this.state = {
+            buttonDisabled: false
+        };
+    }
+
     render() {
         return (
             <Contents>
@@ -51,6 +59,7 @@ class ButtonDemo extends React.Component {
                 {/* 通常のボタン */}
                 <ButtonInfo>
                     <QaButton title='QaButton'
+                        disabled={this.state.buttonDisabled}
                         onClick={this.onClickQaButton.bind(this)}
                     />
                 </ButtonInfo>
@@ -58,6 +67,7 @@ class ButtonDemo extends React.Component {
                 {/* フォーカス残すボタン */}
                 <ButtonInfo>
                     <QaFocusButton title='QaFocusButton'
+                        disabled={this.state.buttonDisabled}
                         onClick={this.onClickQaFocusButton.bind(this)}
                         ref={(el) => { this._focusButton = el; }}
                     />
@@ -67,12 +77,17 @@ class ButtonDemo extends React.Component {
                 {/* ローディングボタン */}
                 <ButtonInfo>
                     <QaLoadingButton title='QaLoadingButton'
+                        disabled={this.state.buttonDisabled}
                         onClick={this.onClickQaLoadingButton.bind(this)}
                         ref={(el) => { this._loadingButton = el; }}
                     />
                     <button onClick={this.clickCancelButton.bind(this)}>Cancel</button>
                     <button onClick={this.clickDoneButton.bind(this)}>Done</button>
                 </ButtonInfo>
+
+                <hr />
+                <button onClick={this.clickDisableButton.bind(this)}>Disable</button>
+                <button onClick={this.clickEnableButton.bind(this)}>Enable</button>
 
                 <SubTitle>Code</SubTitle>
                 <Code language='javascript'>
@@ -89,6 +104,13 @@ class ButtonDemo extends React.Component {
     clickBlurButton() { this._focusButton.blur(); }
     clickCancelButton() { this._loadingButton.cancel(); }
     clickDoneButton() { this._loadingButton.done(); }
+
+    clickDisableButton() {
+        this.setState({ buttonDisabled: true });
+    }
+    clickEnableButton() {
+        this.setState({ buttonDisabled: false });
+    }
 }
 
 ButtonDemo.propTypes = {

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import QaButtonHelper from './private/QaButtonHelper';
 import {
     buttonColor
     , buttonTime
@@ -110,18 +109,31 @@ class QaFocusButton extends Component {
 
     // interface
 
-    focus() {
-        this._focus();
-    }
+    focus() { this._focus(); }
 
-    blur() {
-        this._blur();
-    }
+    blur() { this._blur(); }
+
+    disable() { this._disable(); }
+
+    enable() { this._enable(); }
 
     // lifeCycle
 
-    componentDidMount() {
-        QaButtonHelper.fixOverlay.apply(this);
+    // componentDidMount() { }
+    // componentWillMount() { }
+    // componentWillUpdate(nextProps, nextState) { }
+    // componentDidUpdate(prevProps, prevState) { }
+    // shouldComponentUpdate() { return true; }
+    // componentWillUnmount() { }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.disabled == this.state.disabled) return;
+
+        if (nextProps.disabled) {
+            this._disable();
+        } else {
+            this._enable();
+        }
     }
 
     render() {
@@ -164,6 +176,22 @@ class QaFocusButton extends Component {
         setTimeout(() => {
             this.setState({ focus: false, blur: false });
         }, buttonTime.animation);
+    }
+
+    _disable() {
+        this.setState({
+            disabled: true,
+            focus: false,
+            blur: false
+        });
+    }
+
+    _enable() {
+        this.setState({
+            disabled: false,
+            focus: false,
+            blur: false
+        });
     }
 }
 

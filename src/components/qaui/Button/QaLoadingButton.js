@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import QaButtonHelper from './private/QaButtonHelper';
 import {
     buttonColor
     , buttonTime
@@ -18,7 +17,11 @@ const Wrapper = BaseWrapperStyle.extend`
     ${props => {
         let state = props.state;
 
-        if (state.focus) {
+        if (state.disabled) {
+            return `
+            border-color: ${buttonColor.disabled};
+            `;
+        } else if (state.focus) {
             return `
             border-color: ${buttonColor.disabled};
             `;
@@ -191,8 +194,16 @@ class QaLoadingButton extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { disabled: props.disabled, focus: false, blur: false, done: false, endDone: false, overlayTop: 0 };
+        this.state = {
+            disabled: props.disabled,
+            focus: false,
+            blur: false,
+            done: false,
+            endDone: false,
+            overlayTop: 0
+        };
         this.overlayInner = null;
+        this.overlayDom = null;
     }
 
     // interface
@@ -203,10 +214,27 @@ class QaLoadingButton extends Component {
 
     done() { this._done(); }
 
+    disable() { this._disable(); }
+
+    enable() { this._enable(); }
+
     // lifeCycle
 
-    componentDidMount() {
-        QaButtonHelper.fixOverlay.apply(this);
+    // componentDidMount() { }
+    // componentWillMount() { }
+    // componentWillUpdate(nextProps, nextState) { }
+    // componentDidUpdate(prevProps, prevState) { }
+    // shouldComponentUpdate() { return true; }
+    // componentWillUnmount() { }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.disabled == this.state.disabled) return;
+
+        if (nextProps.disabled) {
+            this._disable();
+        } else {
+            this._enable();
+        }
     }
 
     render() {
@@ -266,6 +294,26 @@ class QaLoadingButton extends Component {
         this._cancelState();
     }
 
+    _disable() {
+        this.setState({
+            disabled: true,
+            focus: false,
+            blur: false,
+            done: false,
+            endDone: false,
+        });
+    }
+
+    _enable() {
+        this.setState({
+            disabled: false,
+            focus: false,
+            blur: false,
+            done: false,
+            endDone: false,
+        });
+    }
+
     _done() {
         if (!this.state.focus) return;
 
@@ -285,7 +333,7 @@ class QaLoadingButton extends Component {
     }
 
     _canClick() {
-        if (this.props.disabled) return false;
+        if (this.state.disabled) return false;
         if (this.state.focus || this.state.done || this.state.endDone || this.blur) return false;
 
         return true;
