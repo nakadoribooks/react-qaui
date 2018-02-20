@@ -8,6 +8,7 @@ import {
     , BaseOverlayInnerStyle
     , BaseTitleStyle
 } from './private/QaButtonStyle';
+import { keyframes } from 'styled-components';
 
 const Wrapper = BaseWrapperStyle.extend`
 // default
@@ -17,13 +18,13 @@ cursor:pointer;
 }
 `;
 
+const TitleFocus = keyframes`
+    0% { transform: scale(1.0); } 
+    50% { transform: scale(0.98); } 
+    100% { transform: scale(1.0); }
+`;
+
 const Title = BaseTitleStyle.extend`
-    
-    @keyframes QaButtonTitleFocusAnimation{
-        0% { transform: scale(1.0); } 
-        50% { transform: scale(0.98); } 
-        100% { transform: scale(1.0); }
-    }
 
     ${ props => {
         if (props.state.disabled) {
@@ -32,7 +33,7 @@ const Title = BaseTitleStyle.extend`
             `;
         } else if (props.state.focus) {
             return `
-                animation-name: QaButtonTitleFocusAnimation;
+                animation-name: ${TitleFocus};
                 animation-duration: ${buttonTime.animation}ms;
             `;
         }
@@ -40,13 +41,12 @@ const Title = BaseTitleStyle.extend`
 `;
 
 const Overlay = BaseOverlayStyle.extend``;
+const ButtonFocus = keyframes`
+    0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.8; } 
+    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.1 }
+`;
 
 const OverlayInner = BaseOverlayInnerStyle.extend`
-    
-    @keyframes QaButtonFocusAnimation{
-        0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.8; } 
-        100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.1 }
-    }
 
     ${ props => {
 
@@ -57,7 +57,7 @@ const OverlayInner = BaseOverlayInnerStyle.extend`
             `;
         } else if (state.focus) {
             return `
-                animation-name: QaButtonFocusAnimation;
+                animation-name: ${ButtonFocus};
                 animation-duration: ${buttonTime.animation}ms;
             `;
         }

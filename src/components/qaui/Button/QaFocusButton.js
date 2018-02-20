@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { keyframes } from 'styled-components';
 import {
     buttonColor
     , buttonTime
@@ -33,17 +34,16 @@ const Wrapper = BaseWrapperStyle.extend`
     }}
 `;
 
+const TitleFocus = keyframes`
+    0% { transform: scale(1.0); color:${buttonColor.base}; } 
+    100% { transform: scale(0.98); color:${buttonColor.lightText}; }
+`;
+const TitleBlur = keyframes`
+    0% { transform: scale(0.98); color:${buttonColor.lightText}; } 
+    100% { transform: scale(1.0); color:${buttonColor.base}; }
+`;
 
 const Title = BaseTitleStyle.extend`
-
-    @keyframes QaFocusButtonTitleFocusAnimation{
-        0% { transform: scale(1.0); color:${buttonColor.base}; } 
-        100% { transform: scale(0.98); color:${buttonColor.lightText}; }
-    }
-    @keyframes QaFocusButtonTitleBlurAnimation{
-        0% { transform: scale(0.98); color:${buttonColor.lightText}; } 
-        100% { transform: scale(1.0); color:${buttonColor.base}; }
-    }
 
     ${ props => {
         let state = props.state;
@@ -53,13 +53,13 @@ const Title = BaseTitleStyle.extend`
             `;
         } else if (state.focus) {
             return `
-                animation-name: QaFocusButtonTitleFocusAnimation;
+                animation-name: ${TitleFocus};
                 animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         } else if (state.blur) {
             return `
-                animation-name: QaFocusButtonTitleBlurAnimation;
+                animation-name: ${TitleBlur};
                 animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
@@ -69,15 +69,16 @@ const Title = BaseTitleStyle.extend`
 
 const Overlay = BaseOverlayStyle.extend``;
 
+const ButtonFocus = keyframes`
+    0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.0; } 
+    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0 }
+`;
+const ButtonBlur = keyframes`
+    0% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0; } 
+    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.0 }
+`;
+
 const OverlayInner = BaseOverlayInnerStyle.extend`
-    @keyframes QaFocusButtonFocusAnimation{
-        0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.0; } 
-        100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0 }
-    }
-    @keyframes QaFocusButtonBlurAnimation{
-        0% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0; } 
-        100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.0 }
-    }
 
     ${ props => {
         let state = props.state;
@@ -86,13 +87,13 @@ const OverlayInner = BaseOverlayInnerStyle.extend`
             `;
         } else if (state.focus) {
             return `
-                animation-name: QaFocusButtonFocusAnimation;
+                animation-name: ${ButtonFocus};
                 animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         } else if (state.blur) {
             return `
-                animation-name: QaFocusButtonBlurAnimation;
+                animation-name: ${ButtonBlur};
                 animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
