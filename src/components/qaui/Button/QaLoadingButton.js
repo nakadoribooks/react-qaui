@@ -44,10 +44,10 @@ const Wrapper = BaseWrapperStyle.extend`
 
 const TitleFocus = keyframes`
     0% { transform: translateX(0px) scale(1.0); color:${buttonColor.base}; } 
-    100% { transform: translateX(12px) scale(0.9); color:${buttonColor.lightText}; }
+    100% { transform: translateX(12px) scale(0.95); color:${buttonColor.lightText}; }
 `;
 const TitleBlur = keyframes`
-    0% { transform: translateX(12px) scale(0.9); color:${buttonColor.lightText}; } 
+    0% { transform: translateX(12px) scale(0.95); color:${buttonColor.lightText}; } 
     100% { transform: translateX(0px) scale(1.0); color:${buttonColor.base}; }
 `;
 

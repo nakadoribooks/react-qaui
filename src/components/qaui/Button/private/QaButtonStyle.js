@@ -50,9 +50,9 @@ const BaseOverlayStyle = styled.div`
 
 const BaseOverlayInnerStyle = styled.div`
     position: relative;
-    left:-20%;
-    width: 140%;
-    border-radius: calc(140% / 2);
+    left:-25%;
+    width: 150%;
+    border-radius: calc(150% / 2);
     background: ${buttonColor.base};
     transform: translateY(calc(-50% + 16px)) scale(0.0);
     &:before {
