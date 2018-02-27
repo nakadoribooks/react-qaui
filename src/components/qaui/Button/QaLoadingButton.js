@@ -167,8 +167,7 @@ class QaLoadingButton extends Component {
             focus: false,
             blur: false,
             done: false,
-            endDone: false,
-            overlayTop: 0
+            endDone: false
         };
         this.overlayInner = null;
         this.overlayDom = null;

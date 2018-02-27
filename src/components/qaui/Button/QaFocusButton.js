@@ -103,7 +103,6 @@ class QaFocusButton extends Component {
             disabled: props.disabled
             , focus: false
             , blur: false
-            , overlayTop: 0
         };
         this.overlayInner = null;
     }

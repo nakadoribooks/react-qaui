@@ -77,7 +77,6 @@ class QaButton extends Component {
         this.state = {
             disabled: props.disabled
             , focus: false
-            , overlayTop: 0
         };
         this.overlayInner = null;
     }
@@ -110,7 +109,6 @@ class QaButton extends Component {
                     state={this.state}>
                     <OverlayInner
                         state={this.state}
-                        overlayTop={this.state.overlayTop}
                         disabled={this.props.disabled}
                         innerRef={(el) => { this.overlayInnerDom = el; }}
                     />
