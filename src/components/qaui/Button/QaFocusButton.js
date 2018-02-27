@@ -77,20 +77,19 @@ const Overlay = BaseOverlayStyle.extend``;
 
 const OverlayInner = BaseOverlayInnerStyle.extend`
 
+    animation-duration: ${buttonTime.animation}ms;
+    animation-fill-mode: forwards;
+
     ${ ({ state }) => {
         if (state.disabled) {
             return '';
         } else if (state.focus) {
             return `
                 animation-name: ${OverlayFocusAnimation};
-                animation-duration: ${buttonTime.animation}ms;
-                animation-fill-mode: forwards;
             `;
         } else if (state.blur) {
             return `
                 animation-name: ${OverlayBlurAnimation};
-                animation-duration: ${buttonTime.animation}ms;
-                animation-fill-mode: forwards;
             `;
         }
     }}
