@@ -10,10 +10,26 @@ import {
     , BaseTitleStyle
 } from './private/QaButtonStyle';
 
+const TitleFocusAnimation = keyframes`
+    0% { transform: scale(1.0); color:${buttonColor.base}; } 
+    100% { transform: scale(0.98); color:${buttonColor.lightText}; }
+`;
+const TitleBlurAnimation = keyframes`
+    0% { transform: scale(0.98); color:${buttonColor.lightText}; } 
+    100% { transform: scale(1.0); color:${buttonColor.base}; }
+`;
+const OverlayFocusAnimation = keyframes`
+    0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.0; } 
+    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0 }
+`;
+const OverlayBlurAnimation = keyframes`
+    0% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0; } 
+    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.0 }
+`;
+
 const Wrapper = BaseWrapperStyle.extend`
 
-    ${props => {
-        let state = props.state;
+    ${({ state }) => {
 
         // disable
         if (state.disabled) {
@@ -34,32 +50,22 @@ const Wrapper = BaseWrapperStyle.extend`
     }}
 `;
 
-const TitleFocus = keyframes`
-    0% { transform: scale(1.0); color:${buttonColor.base}; } 
-    100% { transform: scale(0.98); color:${buttonColor.lightText}; }
-`;
-const TitleBlur = keyframes`
-    0% { transform: scale(0.98); color:${buttonColor.lightText}; } 
-    100% { transform: scale(1.0); color:${buttonColor.base}; }
-`;
-
 const Title = BaseTitleStyle.extend`
 
-    ${ props => {
-        let state = props.state;
+    ${ ({ state }) => {
         if (state.disabled) {
             return `
             color: ${buttonColor.disabled};
             `;
         } else if (state.focus) {
             return `
-                animation-name: ${TitleFocus};
+                animation-name: ${TitleFocusAnimation};
                 animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         } else if (state.blur) {
             return `
-                animation-name: ${TitleBlur};
+                animation-name: ${TitleBlurAnimation};
                 animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
@@ -69,31 +75,20 @@ const Title = BaseTitleStyle.extend`
 
 const Overlay = BaseOverlayStyle.extend``;
 
-const ButtonFocus = keyframes`
-    0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.0; } 
-    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0 }
-`;
-const ButtonBlur = keyframes`
-    0% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0; } 
-    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.0 }
-`;
-
 const OverlayInner = BaseOverlayInnerStyle.extend`
 
-    ${ props => {
-        let state = props.state;
+    ${ ({ state }) => {
         if (state.disabled) {
-            return `
-            `;
+            return '';
         } else if (state.focus) {
             return `
-                animation-name: ${ButtonFocus};
+                animation-name: ${OverlayFocusAnimation};
                 animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
         } else if (state.blur) {
             return `
-                animation-name: ${ButtonBlur};
+                animation-name: ${OverlayBlurAnimation};
                 animation-duration: ${buttonTime.animation}ms;
                 animation-fill-mode: forwards;
             `;
@@ -104,7 +99,12 @@ const OverlayInner = BaseOverlayInnerStyle.extend`
 class QaFocusButton extends Component {
     constructor(props) {
         super(props);
-        this.state = { disabled: props.disabled, focus: false, blur: false, overlayTop: 0 };
+        this.state = {
+            disabled: props.disabled
+            , focus: false
+            , blur: false
+            , overlayTop: 0
+        };
         this.overlayInner = null;
     }
 
@@ -120,13 +120,6 @@ class QaFocusButton extends Component {
 
     // lifeCycle
 
-    // componentDidMount() { }
-    // componentWillMount() { }
-    // componentWillUpdate(nextProps, nextState) { }
-    // componentDidUpdate(prevProps, prevState) { }
-    // shouldComponentUpdate() { return true; }
-    // componentWillUnmount() { }
-
     componentWillReceiveProps(nextProps) {
         if (nextProps.disabled == this.state.disabled) return;
 
@@ -139,23 +132,21 @@ class QaFocusButton extends Component {
 
     render() {
         return (
-            <div>
-                <Wrapper
-                    state={this.state}
-                    onClick={this._onClick.bind(this)}>
-                    <Overlay
-                        innerRef={(el) => { this.overlayDom = el; }}
-                        state={this.state}>
-                        <OverlayInner
-                            state={this.state}
-                            innerRef={(el) => { this.overlayInnerDom = el; }}
-                        />
-                    </Overlay>
-                    <Title
+            <Wrapper
+                state={this.state}
+                onClick={this._onClick.bind(this)}>
+                <Overlay
+                    innerRef={(el) => { this.overlayDom = el; }}
+                    state={this.state}>
+                    <OverlayInner
                         state={this.state}
-                    >{this.props.title}</Title>
-                </Wrapper>
-            </div>
+                        innerRef={(el) => { this.overlayInnerDom = el; }}
+                    />
+                </Overlay>
+                <Title
+                    state={this.state}
+                >{this.props.title}</Title>
+            </Wrapper>
         );
     }
 

@@ -9,13 +9,41 @@ import {
     , BaseOverlayInnerStyle
     , BaseTitleStyle
     , LoaderStyle
+    , DoneImage
 } from './private/QaButtonStyle';
+
+const TitleFocusAnimation = keyframes`
+    0% { transform: translateX(0px) scale(1.0); color:${buttonColor.base}; } 
+    100% { transform: translateX(12px) scale(0.95); color:${buttonColor.lightText}; }
+`;
+const TitleBlurAnimation = keyframes`
+    0% { transform: translateX(12px) scale(0.95); color:${buttonColor.lightText}; } 
+    100% { transform: translateX(0px) scale(1.0); color:${buttonColor.base}; }
+`;
+const LoadingFocusAnimation = keyframes`
+    0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.0; } 
+    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0 }
+`;
+
+const LoadingBlurAnimation = keyframes`
+    0% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0; } 
+    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.0 }
+`;
+
+const LoadingDoneAnimation = keyframes`
+    0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:1.0; background:${buttonColor.base}; } 
+    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0;  background:${buttonColor.base}; }
+`;
+
+const LoadingEndDoneAnimation = keyframes`
+    0% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0; background:${buttonColor.base}; } 
+    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.0;  background:${buttonColor.base}; }
+`;
 
 const Wrapper = BaseWrapperStyle.extend`
     padding-left: 20px;
     padding-right : 20px;
-    ${props => {
-        let state = props.state;
+    ${({ state }) => {
 
         if (state.disabled) {
             return `
@@ -42,35 +70,24 @@ const Wrapper = BaseWrapperStyle.extend`
     }}
 `;
 
-const TitleFocus = keyframes`
-    0% { transform: translateX(0px) scale(1.0); color:${buttonColor.base}; } 
-    100% { transform: translateX(12px) scale(0.95); color:${buttonColor.lightText}; }
-`;
-const TitleBlur = keyframes`
-    0% { transform: translateX(12px) scale(0.95); color:${buttonColor.lightText}; } 
-    100% { transform: translateX(0px) scale(1.0); color:${buttonColor.base}; }
-`;
-
 const Title = BaseTitleStyle.extend`
 
-    ${ props => {
-        let state = props.state;
+    animation-duration: ${buttonTime.animation}ms;
+    animation-fill-mode: forwards;
+
+    ${ ({ state }) => {
 
         if (state.disabled) {
             return `
-            color: ${buttonColor.disabled};
+                color: ${buttonColor.disabled};
             `;
         } else if (state.focus) {
             return `
-                animation-name: ${TitleFocus};
-                animation-duration: ${buttonTime.animation}ms;
-                animation-fill-mode: forwards;
+                animation-name: ${TitleFocusAnimation};
             `;
         } else if (state.blur) {
             return `
-                animation-name: ${TitleBlur};
-                animation-duration: ${buttonTime.animation}ms;
-                animation-fill-mode: forwards;
+                animation-name: ${TitleBlurAnimation};
             `;
         } else if (state.done) {
             return `
@@ -79,9 +96,7 @@ const Title = BaseTitleStyle.extend`
             `;
         } else if (state.endDone) {
             return `
-                animation-name: ${TitleBlur};
-                animation-duration: ${buttonTime.animation}ms;
-                animation-fill-mode: forwards;
+                animation-name: ${TitleBlurAnimation};
             `;
         }
     }}
@@ -89,58 +104,32 @@ const Title = BaseTitleStyle.extend`
 
 const Overlay = BaseOverlayStyle.extend``;
 
-const LoadingFocus = keyframes`
-    0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.0; } 
-    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0 }
-`;
-
-const LoadingBlur = keyframes`
-    0% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0; } 
-    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.0 }
-`;
-
-const LoadingDone = keyframes`
-    0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:1.0; background:${buttonColor.base}; } 
-    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0;  background:${buttonColor.base}; }
-`;
-
-const LoadingEndDone = keyframes`
-    0% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:1.0; background:${buttonColor.base}; } 
-    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.0;  background:${buttonColor.base}; }
-`;
-
 const OverlayInner = BaseOverlayInnerStyle.extend`
-    background: ${buttonColor.disabled};
+    
+background: ${buttonColor.disabled};
+    animation-duration: ${buttonTime.animation}ms;
+    animation-fill-mode: forwards;
 
-    ${ props => {
-        let state = props.state;
+    ${ ({ state }) => {
 
         if (state.disabled) {
             return `
             `;
         } else if (state.focus) {
             return `
-                animation-name: ${LoadingFocus};
-                animation-duration: ${buttonTime.animation}ms;
-                animation-fill-mode: forwards;
+                animation-name: ${LoadingFocusAnimation};
             `;
         } else if (state.blur) {
             return `
-                animation-name: ${LoadingBlur};
-                animation-duration: ${buttonTime.animation}ms;
-                animation-fill-mode: forwards;
+                animation-name: ${LoadingBlurAnimation};
             `;
         } else if (state.done) {
             return `
-                animation-name: ${LoadingDone};
-                animation-duration: ${buttonTime.animation}ms;
-                animation-fill-mode: forwards;
+                animation-name: ${LoadingDoneAnimation};
             `;
         } else if (state.endDone) {
             return `
-                animation-name: ${LoadingEndDone};
-                animation-duration: ${buttonTime.animation}ms;
-                animation-fill-mode: forwards;
+                animation-name: ${LoadingEndDoneAnimation};
             `;
         }
     }}
@@ -155,18 +144,8 @@ const LoadingContainer = styled.div`
 `;
 
 const Loader = LoaderStyle.extend`
-    opacity:0.0;
     transition: opacity 200ms ease;
-
-    ${ props => {
-        let state = props.state;
-
-        if (state.focus) {
-            return `
-                opacity: 1.0;
-            `;
-        }
-    }}
+    opacity: ${ ({ state }) => (state.focus) ? '1.0' : '0.0'};
 `;
 
 const DoneContainer = styled.div`
@@ -175,18 +154,8 @@ const DoneContainer = styled.div`
     left:5px;
     width:24px;
     height:24px;
-    opacity: 0;
     transition: opacity 200ms ease;
-
-    ${ props => {
-        let state = props.state;
-
-        if (state.done) {
-            return `
-                opacity: 1.0;
-            `;
-        }
-    }}
+    opacity: ${ ({ state }) => (state.done) ? '1.0' : '0.0'};
 `;
 
 class QaLoadingButton extends Component {
@@ -219,13 +188,6 @@ class QaLoadingButton extends Component {
 
     // lifeCycle
 
-    // componentDidMount() { }
-    // componentWillMount() { }
-    // componentWillUpdate(nextProps, nextState) { }
-    // componentDidUpdate(prevProps, prevState) { }
-    // shouldComponentUpdate() { return true; }
-    // componentWillUnmount() { }
-
     componentWillReceiveProps(nextProps) {
         if (nextProps.disabled == this.state.disabled) return;
 
@@ -239,36 +201,31 @@ class QaLoadingButton extends Component {
     render() {
 
         return (
-            <div>
-                <Wrapper
+            <Wrapper
+                state={this.state}
+                onClick={this._onClick.bind(this)}>
+                <Overlay
                     state={this.state}
-                    onClick={this._onClick.bind(this)}>
-                    <Overlay
+                    innerRef={(el) => { this.overlayDom = el; }}>
+                    <OverlayInner
                         state={this.state}
-                        innerRef={(el) => { this.overlayDom = el; }}>
-                        <OverlayInner
-                            state={this.state}
-                            innerRef={(el) => { this.overlayInnerDom = el; }}
-                        />
-                    </Overlay>
-                    <LoadingContainer>
-                        <Loader
-                            state={this.state}
-                        />
-                    </LoadingContainer>
-                    <DoneContainer
+                        innerRef={(el) => { this.overlayInnerDom = el; }}
+                    />
+                </Overlay>
+                <LoadingContainer>
+                    <Loader
                         state={this.state}
-                    >
-                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 0h24v24H0z" fill="none" />
-                            <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
-                        </svg>
-                    </DoneContainer>
-                    <Title
-                        state={this.state}
-                    >{this.props.title}</Title>
-                </Wrapper>
-            </div>
+                    />
+                </LoadingContainer>
+                <DoneContainer
+                    state={this.state}
+                >
+                    <DoneImage />
+                </DoneContainer>
+                <Title
+                    state={this.state}
+                >{this.props.title}</Title>
+            </Wrapper>
         );
     }
 

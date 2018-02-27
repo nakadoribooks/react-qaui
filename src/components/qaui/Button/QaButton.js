@@ -10,30 +10,46 @@ import {
 } from './private/QaButtonStyle';
 import { keyframes } from 'styled-components';
 
-const Wrapper = BaseWrapperStyle.extend`
-// default
-cursor:pointer;
-&: hover{
-    border-color: ${ buttonColor.baseDark};
-}
-`;
-
-const TitleFocus = keyframes`
+const TitleFocusAnimation = keyframes`
     0% { transform: scale(1.0); } 
     50% { transform: scale(0.98); } 
     100% { transform: scale(1.0); }
 `;
+const OverlayFocusAnimation = keyframes`
+    0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.8; } 
+    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.1 }
+`;
+
+const Wrapper = BaseWrapperStyle.extend`
+
+    ${({ state }) => {
+        // disable
+        if (state.disabled) {
+            return `
+                cursor:default ;
+                border-color: ${buttonColor.disabled};
+            `;
+        } else {
+            return `
+                cursor:pointer;
+                &: hover{
+                    border-color: ${ buttonColor.baseDark};
+                }
+            `;
+        }
+    }}
+`;
 
 const Title = BaseTitleStyle.extend`
 
-    ${ props => {
-        if (props.state.disabled) {
+    ${ ({ state }) => {
+        if (state.disabled) {
             return `
             color: ${buttonColor.disabled};
             `;
-        } else if (props.state.focus) {
+        } else if (state.focus) {
             return `
-                animation-name: ${TitleFocus};
+                animation-name: ${TitleFocusAnimation};
                 animation-duration: ${buttonTime.animation}ms;
             `;
         }
@@ -41,33 +57,28 @@ const Title = BaseTitleStyle.extend`
 `;
 
 const Overlay = BaseOverlayStyle.extend``;
-const ButtonFocus = keyframes`
-    0% { transform: translateY(calc(-50% + 16px)) scale(0.0); opacity:0.8; } 
-    100% { transform: translateY(calc(-50% + 16px)) scale(1.0); opacity:0.1 }
-`;
 
 const OverlayInner = BaseOverlayInnerStyle.extend`
 
-    ${ props => {
-
-        let state = props.state;
-
-        if (state.disabled) {
+    ${ ({ state }) => {
+        if (state.focus) {
             return `
-            `;
-        } else if (state.focus) {
-            return `
-                animation-name: ${ButtonFocus};
+                animation-name: ${OverlayFocusAnimation};
                 animation-duration: ${buttonTime.animation}ms;
             `;
         }
+        return '';
     }}
 `;
 
 class QaButton extends Component {
     constructor(props) {
         super(props);
-        this.state = { disabled: props.disabled, focus: false, overlayTop: 0 };
+        this.state = {
+            disabled: props.disabled
+            , focus: false
+            , overlayTop: 0
+        };
         this.overlayInner = null;
     }
 
@@ -77,14 +88,7 @@ class QaButton extends Component {
 
     enable() { this._enable(); }
 
-    // lifeCycle
-
-    // componentDidMount() { }
-    // componentWillMount() { }
-    // componentWillUpdate(nextProps, nextState) { }
-    // componentDidUpdate(prevProps, prevState) { }
-    // shouldComponentUpdate() { return true; }
-    // componentWillUnmount() { }
+    // lifecycle 
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.disabled == this.state.disabled) return;
@@ -98,26 +102,24 @@ class QaButton extends Component {
 
     render() {
         return (
-            <div>
-                <Wrapper
-                    state={this.state}
-                    onClick={this.onClick.bind(this)}>
-                    <Overlay
-                        innerRef={(el) => { this.overlayDom = el; }}
-                        state={this.state}>
-                        <OverlayInner
-                            state={this.state}
-                            overlayTop={this.state.overlayTop}
-                            disabled={this.props.disabled}
-                            innerRef={(el) => { this.overlayInnerDom = el; }}
-                        />
-                    </Overlay>
-                    <Title
-                        disabled={this.props.disabled}
+            <Wrapper
+                state={this.state}
+                onClick={this.onClick.bind(this)}>
+                <Overlay
+                    innerRef={(el) => { this.overlayDom = el; }}
+                    state={this.state}>
+                    <OverlayInner
                         state={this.state}
-                    >{this.props.title}</Title>
-                </Wrapper>
-            </div>
+                        overlayTop={this.state.overlayTop}
+                        disabled={this.props.disabled}
+                        innerRef={(el) => { this.overlayInnerDom = el; }}
+                    />
+                </Overlay>
+                <Title
+                    disabled={this.props.disabled}
+                    state={this.state}
+                >{this.props.title}</Title>
+            </Wrapper>
         );
     }
 
